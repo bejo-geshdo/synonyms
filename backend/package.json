@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc",
-    "serve": "node dist/index.js",
+    "serve": "node dist/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "benjamin jönsson",
