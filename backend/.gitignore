@@ -27,3 +27,5 @@ yarn-error.log*
 
 # TypeScript cache
 *.tsbuildinfo
+
+/temp
