@@ -39,3 +39,4 @@ jobs:
       # Uploads the files to S3
       - name: Deploy to S3
         run: aws s3 sync ./build/ s3://test-synonyms-fe-bucket --delete
+#test
