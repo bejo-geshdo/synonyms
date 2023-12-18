@@ -1,0 +1,41 @@
+name: Update Dev
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - frontend
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: eu-central-1
+  credentials-account: arn:aws:iam::275567994947:role/github-s3
+  ENV_NAME: dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Get's access to aws
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ env.credentials-account }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      # Uploads the files to S3
+      - name: Deploy to S3
+        run: aws s3 sync ./build/ s3://test-synonyms-fe-bucket --delete
