@@ -1,0 +1,52 @@
+name: Update Dev
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - backend
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: eu-central-1
+  credentials-account: arn:aws:iam::275567994947:role/github-s3
+  ENV_NAME: dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Get's access to aws
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ env.credentials-account }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Gives Docker access to our ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Build, tag, and push the image to Amazon ECR
+      - name: Build, tag, and push
+        id: build-image
+        working-directory: ./backend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: test/synonyms
+          IMAGE_TAG: latest-gh
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          echo "Pushing image to ECR..."
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"

@@ -7,6 +7,8 @@ on:
     paths:
       - frontend
 
+  workflow_dispatch:
+
 permissions:
   id-token: write
   contents: read
@@ -22,21 +24,26 @@ jobs:
     steps:
       # Get's access to aws
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ env.credentials-account }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: npm install
+        working-directory: ./frontend
+        run: npm ci
 
       - name: Build
+        working-directory: ./frontend
         run: npm run build
 
       # Uploads the files to S3
       - name: Deploy to S3
-        run: aws s3 sync ./build/ s3://test-synonyms-fe-bucket --delete
-#test
+        run: aws s3 sync ./frontend/build/ s3://test-synonyms-fe-bucket --delete
+
+      # Invalidates cloudfront cache
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id E1DKEI2V9KIDXE --paths "/*"
