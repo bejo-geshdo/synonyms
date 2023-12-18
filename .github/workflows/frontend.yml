@@ -43,3 +43,7 @@ jobs:
       # Uploads the files to S3
       - name: Deploy to S3
         run: aws s3 sync ./frontend/build/ s3://test-synonyms-fe-bucket --delete
+
+      # Invalidates cloudfront cache
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id E1DKEI2V9KIDXE --paths "/*"
