@@ -47,6 +47,7 @@ jobs:
         working-directory: ./backend
         run: |
           echo "Running tests"
+          ls
           npm run test
           echo "tests succeded"
 
