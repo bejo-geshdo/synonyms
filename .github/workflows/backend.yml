@@ -7,6 +7,10 @@ on:
     paths:
       - backend
 
+  # TODO trigger build on approved PR and merge
+  # pull_request_review:
+  #   types: [submitted]
+
   workflow_dispatch:
 
 permissions:
