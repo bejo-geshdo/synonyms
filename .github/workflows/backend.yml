@@ -36,6 +36,7 @@ jobs:
         run: npm run test
 
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       # Get's access to aws
