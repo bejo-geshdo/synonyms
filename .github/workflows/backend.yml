@@ -1,4 +1,4 @@
-name: Update Dev
+name: Update Backend
 
 on:
   push:
@@ -15,10 +15,26 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: eu-central-1
-  credentials-account: arn:aws:iam::275567994947:role/githubECRPut
+  credentials-account: arn:aws:iam::275567994947:role/github-s3
   ENV_NAME: dev
 
 jobs:
+  test:
+    runs-on: ubuntu-latesta
+    steps:
+      - name: Install deps
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Transpile typescript
+        working-directory: ./backend
+        run: npm run build
+
+      # Runs the Chai tests with Mocha
+      - name: Test
+        working-directory: ./backend
+        run: npm run test
+
   deploy:
     runs-on: ubuntu-latest
     steps:
