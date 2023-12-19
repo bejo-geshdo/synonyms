@@ -20,20 +20,27 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latesta
+    runs-on: ubuntu-latest
     steps:
       - name: Install deps
         working-directory: ./backend
-        run: npm ci
+        run: |
+          echo "Installing deps for test"
+          npm ci
 
       - name: Transpile typescript
         working-directory: ./backend
-        run: npm run build
+        run: |
+          echo "Running tsc"
+          npm run build
 
       # Runs the Chai tests with Mocha
       - name: Test
         working-directory: ./backend
-        run: npm run test
+        run: |
+          echo "Running tests"
+          npm run test
+          echo "tests succeded"
 
   deploy:
     needs: test
