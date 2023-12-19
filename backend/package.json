@@ -4,10 +4,10 @@
   "description": "an express js api",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node ./src/index.ts",
     "build": "tsc",
-    "serve": "node dist/src/index.js",
-    "test": "mocha dist/src/tests/tests.js --exit"
+    "serve": "node ./dist/src/index.js",
+    "test": "mocha ./dist/src/tests/tests.js --exit"
   },
   "author": "benjamin jönsson",
   "license": "ISC",
