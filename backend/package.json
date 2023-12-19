@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "build": "tsc",
-    "serve": "node ./dist/src/index.js",
+    "serve": "node ./dist/index.js",
     "test": "mocha ./dist/tests/tests.js --exit"
   },
   "author": "benjamin jönsson",
