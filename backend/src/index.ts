@@ -30,3 +30,5 @@ process.on("SIGTERM", () => {
 });
 
 //TODO Look into adding http-terminator
+
+//Test github actions trigger
