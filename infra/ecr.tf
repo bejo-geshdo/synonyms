@@ -13,13 +13,28 @@ resource "aws_ecr_repository" "app" {
 
 data "aws_iam_policy_document" "github_action_ECR_doc" {
   statement {
-    actions = ["sts:AssumeRole"]
+    actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
 
     principals {
       type        = "Federated"
       identifiers = ["arn:aws:iam::${var.aws_account_id}:oidc-provider/token.actions.githubusercontent.com"]
     }
+
+     condition {
+     test    = "StringEquals"
+     variable = "token.actions.githubusercontent.com:sub"
+     values = [
+       "repo:bejo-geshdo/synonyms:ref:refs/heads/dev", "repo:bejo-geshdo/synonyms:ref:refs/heads/main",
+     ]
+   }
+   condition {
+     test    = "StringEquals"
+     variable = "token.actions.githubusercontent.com:aud"
+     values = [
+       "sts.amazonaws.com",
+     ]
+   }
   }
 }
 
