@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "github_action_ECR_doc" {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:bejo-geshdo/synonyms:ref:refs/heads/dev", "repo:bejo-geshdo/synonyms:ref:refs/heads/main",
+        "repo:bejo-geshdo/synonyms:ref:refs/heads/${var.github_branch}",
       ]
     }
     condition {

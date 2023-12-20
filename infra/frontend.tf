@@ -118,7 +118,7 @@ data "aws_iam_policy_document" "github_action_S3_doc" {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:bejo-geshdo/synonyms:ref:refs/heads/dev", "repo:bejo-geshdo/synonyms:ref:refs/heads/main",
+        "repo:bejo-geshdo/synonyms:ref:refs/heads/${var.github_branch}",
       ]
     }
     condition {
@@ -138,13 +138,12 @@ resource "aws_iam_role" "github_action_S3_role" {
 
 data "aws_iam_policy_document" "github_action_S3_policy_doc" {
   statement {
-    #TODO lock down action so it can not delete the bucket
-    actions   = ["s3:GetObject",
-               "s3:PutObject",
-               "s3:DeleteObject",
-               "s3:ListBucket",
-               "s3:AbortMultipartUpload",
-               "s3:ListMultipartUploadParts"]
+    actions = ["s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+      "s3:ListBucket",
+      "s3:AbortMultipartUpload",
+    "s3:ListMultipartUploadParts"]
     effect    = "Allow"
     resources = [aws_s3_bucket.frontend_bucket.arn, "${aws_s3_bucket.frontend_bucket.arn}/*"]
   }
