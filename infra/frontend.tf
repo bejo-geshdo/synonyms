@@ -155,7 +155,7 @@ data "aws_iam_policy_document" "github_action_S3_policy_doc" {
 resource "aws_iam_policy" "github_action_S3_policy" {
   name_prefix = "${var.name}-${var.env}-gh-actions-S3-policy"
   description = "Used to give github actions access to the ${aws_s3_bucket.frontend_bucket.id}"
-  policy      = data.aws_iam_policy_document.github_action_S3_role.json
+  policy      = data.aws_iam_policy_document.github_action_S3_policy_doc.json
 }
 
 resource "aws_iam_role_policy_attachment" "github_action_S3_policy" {
