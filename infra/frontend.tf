@@ -15,9 +15,9 @@ data "aws_iam_policy_document" "allow_access_from_cloud_front" {
       "s3:GetObject",
     ]
 
-     resources = [
-     "${aws_s3_bucket.frontend_bucket.arn}/*",
-   ]
+    resources = [
+      "${aws_s3_bucket.frontend_bucket.arn}/*",
+    ]
 
     condition {
       test     = "StringEquals"
@@ -150,6 +150,17 @@ data "aws_iam_policy_document" "github_action_S3_policy_doc" {
     effect    = "Allow"
     resources = [aws_cloudfront_distribution.cloud_front.arn]
   }
+}
+
+resource "aws_iam_policy" "github_action_S3_policy" {
+  name_prefix = "${var.name}-${var.env}-gh-actions-S3-policy"
+  description = "Used to give github actions access to the ${aws_s3_bucket.frontend_bucket.id}"
+  policy      = data.aws_iam_policy_document.github_action_S3_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_action_S3_policy" {
+  role       = aws_iam_role.github_action_S3_role.name
+  policy_arn = aws_iam_policy.github_action_S3_policy.arn
 }
 
 output "frontend_s3_bucket_name" {
