@@ -4,9 +4,32 @@ resource "aws_s3_bucket" "frontend_bucket" {
   bucket = "${var.name}-${var.env}-frontend-${var.aws_account_id}"
 }
 
-resource "aws_s3_bucket_acl" "frontend_bucket_acl" {
+data "aws_iam_policy_document" "allow_access_from_cloud_front" {
+  statement {
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    actions = [
+      "s3:GetObject",
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values = [
+        "${aws_cloudfront_distribution.cloud_front.arn}",
+      ]
+    }
+  }
+  version = "2008-10-17"
+}
+
+#Gives Cloud front access to the bucket
+resource "aws_s3_bucket_policy" "frontend_bucket_policy" {
   bucket = aws_s3_bucket.frontend_bucket.id
-  acl    = "private"
+  policy = data.aws_iam_policy_document.allow_access_from_cloud_front.json
 }
 
 resource "aws_cloudfront_origin_access_control" "frontend_bucket_oac" {
