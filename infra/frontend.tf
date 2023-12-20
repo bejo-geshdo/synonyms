@@ -139,9 +139,14 @@ resource "aws_iam_role" "github_action_S3_role" {
 data "aws_iam_policy_document" "github_action_S3_policy_doc" {
   statement {
     #TODO lock down action so it can not delete the bucket
-    actions   = ["s3:*"]
+    actions   = ["s3:GetObject",
+               "s3:PutObject",
+               "s3:DeleteObject",
+               "s3:ListBucket",
+               "s3:AbortMultipartUpload",
+               "s3:ListMultipartUploadParts"]
     effect    = "Allow"
-    resources = [aws_s3_bucket.frontend_bucket.arn]
+    resources = [aws_s3_bucket.frontend_bucket.arn, "${aws_s3_bucket.frontend_bucket.arn}/*"]
   }
 
   #Allows the role to empty the cache in Cloudfront
