@@ -23,6 +23,20 @@ variable "aws_account_id" {
   }
 }
 
+variable "domain" {
+  type    = string
+  default = "synonyms.castrojonsson.se"
+
+  description = "the domain used for the frontend"
+}
+
+variable "hosted_zone_id" {
+  type    = string
+  default = "Z06167743PXL34GPE1XSN"
+
+  description = "The ID of the route 53 hosted zone for our domain"
+}
+
 variable "github_repo" {
   type        = string
   description = "The name of the github repo that will run the gh action"

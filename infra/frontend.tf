@@ -63,12 +63,14 @@ resource "aws_cloudfront_distribution" "cloud_front" {
   #Makes it so TF does not wait for CF to be fully deployed
   wait_for_deployment = false
 
-  #TODO Add Route 53
-  #aliases = ["synonyms.castrojonsson.se"]
-
+  #Our custom domain name
+  aliases = [var.domain]
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = aws_acm_certificate.cert.arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.1_2016"
   }
+
   is_ipv6_enabled = true
   http_version    = "http2and3"
   #Runns the CF only in EU an NA
@@ -100,6 +102,37 @@ resource "aws_cloudfront_distribution" "cloud_front" {
     default_ttl            = 0
     max_ttl                = 0
   }
+}
+
+# --- ACM for custom Domain ---
+
+resource "aws_acm_certificate" "cert" {
+  provider          = aws.us_east_1
+  domain_name       = var.domain
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_record" "hello_cert_dns" {
+  allow_overwrite = true
+  name            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_name
+  records         = [tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_value]
+  type            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_type
+  zone_id         = var.hosted_zone_id
+  ttl             = 300
+}
+
+# --- Route 53 Custom domain ---
+
+resource "aws_route53_record" "cloud_front" {
+  zone_id = var.hosted_zone_id
+  type    = "CNAME"
+  ttl     = "300"
+  name    = var.domain
+  records = [aws_cloudfront_distribution.cloud_front.domain_name]
 }
 
 # --- Github actions IAM ---
