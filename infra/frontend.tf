@@ -37,7 +37,7 @@ resource "aws_s3_bucket_policy" "frontend_bucket_policy" {
 }
 
 resource "aws_cloudfront_origin_access_control" "frontend_bucket_oac" {
-  name                              = "s3-cloudfront-oac"
+  name                              = "${var.name}-${var.env}-s3-cloudfront-oac"
   description                       = "Grant cloudfront access to s3 bucket ${aws_s3_bucket.frontend_bucket.id}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
