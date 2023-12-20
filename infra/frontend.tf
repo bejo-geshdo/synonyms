@@ -37,7 +37,7 @@ resource "aws_s3_bucket_policy" "frontend_bucket_policy" {
 }
 
 resource "aws_cloudfront_origin_access_control" "frontend_bucket_oac" {
-  name                              = "s3-cloudfront-oac"
+  name                              = "${var.name}-${var.env}-s3-cloudfront-oac"
   description                       = "Grant cloudfront access to s3 bucket ${aws_s3_bucket.frontend_bucket.id}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -118,7 +118,7 @@ data "aws_iam_policy_document" "github_action_S3_doc" {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:bejo-geshdo/synonyms:ref:refs/heads/dev", "repo:bejo-geshdo/synonyms:ref:refs/heads/main",
+        "repo:bejo-geshdo/synonyms:ref:refs/heads/${var.github_branch}",
       ]
     }
     condition {
@@ -132,19 +132,18 @@ data "aws_iam_policy_document" "github_action_S3_doc" {
 }
 
 resource "aws_iam_role" "github_action_S3_role" {
-  name_prefix        = "${var.name}-${var.env}-gh-actions-S3-role"
+  name               = "${var.name}-${var.env}-gh-actions-S3-role"
   assume_role_policy = data.aws_iam_policy_document.github_action_ECR_doc.json
 }
 
 data "aws_iam_policy_document" "github_action_S3_policy_doc" {
   statement {
-    #TODO lock down action so it can not delete the bucket
-    actions   = ["s3:GetObject",
-               "s3:PutObject",
-               "s3:DeleteObject",
-               "s3:ListBucket",
-               "s3:AbortMultipartUpload",
-               "s3:ListMultipartUploadParts"]
+    actions = ["s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+      "s3:ListBucket",
+      "s3:AbortMultipartUpload",
+    "s3:ListMultipartUploadParts"]
     effect    = "Allow"
     resources = [aws_s3_bucket.frontend_bucket.arn, "${aws_s3_bucket.frontend_bucket.arn}/*"]
   }
