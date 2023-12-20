@@ -63,6 +63,7 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_lb_listener" "https" {
+  depends_on = [ time_sleep.api_cert_dns ]
   load_balancer_arn = aws_lb.main.id
   port              = 443
   protocol          = "HTTPS"
@@ -72,13 +73,14 @@ resource "aws_lb_listener" "https" {
     target_group_arn = aws_lb_target_group.app.id
   }
 
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn = aws_acm_certificate.api_cert.arn
 }
 
 # --- ACM for custom Domain ---
 
 resource "aws_acm_certificate" "api_cert" {
-  provider          = aws.us_east_1
+ # provider          = aws.us_east_1
   domain_name       = "api.${var.domain}"
   validation_method = "DNS"
 
@@ -89,11 +91,17 @@ resource "aws_acm_certificate" "api_cert" {
 
 resource "aws_route53_record" "api_cert_dns" {
   allow_overwrite = true
-  name            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_name
-  records         = [tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_value]
-  type            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_type
+  name            = tolist(aws_acm_certificate.api_cert.domain_validation_options)[0].resource_record_name
+  records         = [tolist(aws_acm_certificate.api_cert.domain_validation_options)[0].resource_record_value]
+  type            = tolist(aws_acm_certificate.api_cert.domain_validation_options)[0].resource_record_type
   zone_id         = var.hosted_zone_id
   ttl             = 300
+}
+
+resource "time_sleep" "api_cert_dns" {
+  depends_on = [aws_route53_record.api_cert_dns]
+
+  create_duration = "60s"
 }
 
 # --- Route 53 Custom domain ---
