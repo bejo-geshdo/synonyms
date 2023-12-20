@@ -53,7 +53,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./infra
-        run: terraform plan -var="env=prod" -var="github_branch=main" -out=tfplan -input=false
+        run: terraform plan -var="env=prod" -var="github_branch=main" -var="domain=synonyms.castrojonsson.se" -out=tfplan -input=false
 
       - name: Terrafomr apply
         working-directory: ./infra

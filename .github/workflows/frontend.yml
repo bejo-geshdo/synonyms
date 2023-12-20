@@ -3,7 +3,7 @@ name: Update Frontend Prod
 on:
   push:
     branches:
-      - dev
+      - main
     paths:
       - frontend/**
       - .github/workflows/frontend.yml
@@ -19,6 +19,7 @@ env:
   credentials-account: arn:aws:iam::275567994947:role/synonyms-prod-gh-actions-S3-role
   ENV_NAME: prod
   CF_DISTRIBUTION: E22GFRHGJHAV2X
+  REACT_APP_API_URL: http://synonyms-prod-alb-232525125.eu-central-1.elb.amazonaws.com
 
 jobs:
   deploy:
