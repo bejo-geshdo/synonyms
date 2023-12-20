@@ -54,3 +54,18 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
+
+# --- ECS Node SG ---
+
+#SG that opens all ports on egress
+resource "aws_security_group" "ecs_node_sg" {
+  name_prefix = "${var.name}-${var.env}-ecs-node-sg-"
+  vpc_id      = aws_vpc.main.id
+
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
