@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const apiUrl = process.env.API_URL || "http://localhost:8080";
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
 function App() {
   const [word, setWord] = useState("");

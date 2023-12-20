@@ -19,6 +19,7 @@ env:
   credentials-account: arn:aws:iam::275567994947:role/synonyms-dev-gh-actions-S3-role
   ENV_NAME: dev
   CF_DISTRIBUTION: E1XIQGOVKGH1MZ
+  REACT_APP_API_URL: synonyms-dev-alb-2117699286.eu-central-1.elb.amazonaws.com
 
 jobs:
   deploy:
