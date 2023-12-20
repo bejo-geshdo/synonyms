@@ -7,11 +7,11 @@ chai.use(chaiHttp);
 
 //TODO have only one describe for each endpoint with many it's
 
-//Checks if we can add a synonym pair
 describe("POST /add", () => {
   beforeEach(() => {
     const jsonRes = { words: ["foo", "bar"] };
   });
+  //Checks if we can add a synonym pair
   it("should add a synonym pair", (done) => {
     chai
       .request(app)
@@ -22,10 +22,7 @@ describe("POST /add", () => {
         done();
       });
   });
-});
-
-//Checks if we can add more synonyms to an existing pair
-describe("POST /add more words", () => {
+  //Checks if we can add more synonyms to an existing pair
   it("should add a new synonyms to existing word", (done) => {
     chai
       .request(app)
@@ -36,11 +33,9 @@ describe("POST /add more words", () => {
         done();
       });
   });
-});
 
-//Checks that we get an error if we try to add only one word
-describe("POST /add to few words", () => {
-  it("should return an error", (done) => {
+  //Checks that we get an error if we try to add only one word
+  it("should return an error when adding 1 word", (done) => {
     chai
       .request(app)
       .post("/add")
@@ -54,8 +49,8 @@ describe("POST /add to few words", () => {
   });
 });
 
-//Checks that we return the synonyms we added before
 describe("GET /find", () => {
+  //Checks that we return the synonyms we added before
   it("should return the synonyms added before", (done) => {
     chai
       .request(app)
@@ -71,11 +66,9 @@ describe("GET /find", () => {
         done();
       });
   });
-});
 
-//Checks that we get 404 when we look for words we have not added
-describe("GET /find word not in app", () => {
-  it("should return an error 404", (done) => {
+  //Checks that we get 404 when we look for words we have not added
+  it("should return an error 404 when we search for non existing word", (done) => {
     chai
       .request(app)
       .get("/find?word=foo")
@@ -87,11 +80,9 @@ describe("GET /find word not in app", () => {
         done();
       });
   });
-});
 
-//Checks that we get an error when we don't include query
-describe("GET /find missing word", () => {
-  it("should return an error 400", (done) => {
+  //Checks that we get an error when we don't include query
+  it("should return an error 400 when we don't include query", (done) => {
     chai
       .request(app)
       .get("/find")
