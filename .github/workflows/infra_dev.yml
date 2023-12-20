@@ -18,6 +18,7 @@ env:
   AWS_DEFAULT_REGION: eu-central-1
   credentials-account: arn:aws:iam::275567994947:role/terraform-20231219172347146900000001
   WORKSPACE_NAME: dev
+  DOMAIN: dev-synonyms.castrojonsson.se
 
 jobs:
   deploy:
@@ -53,7 +54,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./infra
-        run: terraform plan -var="env=dev" -var="github_branch=dev" -var="domain=dev-synonyms.castrojonsson.se" -out=tfplan -input=false
+        run: terraform plan -var="env=dev" -var="github_branch=dev" -var="domain=${{env.DOMAIN}}" -out=tfplan -input=false
 
       - name: Terrafomr apply
         working-directory: ./infra
