@@ -21,20 +21,20 @@ data "aws_iam_policy_document" "github_action_ECR_doc" {
       identifiers = ["arn:aws:iam::${var.aws_account_id}:oidc-provider/token.actions.githubusercontent.com"]
     }
 
-     condition {
-     test    = "StringEquals"
-     variable = "token.actions.githubusercontent.com:sub"
-     values = [
-       "repo:bejo-geshdo/synonyms:ref:refs/heads/dev", "repo:bejo-geshdo/synonyms:ref:refs/heads/main",
-     ]
-   }
-   condition {
-     test    = "StringEquals"
-     variable = "token.actions.githubusercontent.com:aud"
-     values = [
-       "sts.amazonaws.com",
-     ]
-   }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:sub"
+      values = [
+        "repo:bejo-geshdo/synonyms:ref:refs/heads/dev", "repo:bejo-geshdo/synonyms:ref:refs/heads/main",
+      ]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values = [
+        "sts.amazonaws.com",
+      ]
+    }
   }
 }
 
@@ -75,7 +75,7 @@ output "demo_app_repo_url" {
   value = aws_ecr_repository.app.repository_url
 }
 
-output "gh_actions_role_arn" {
+output "gh_actions_ECR_role_arn" {
   value = aws_iam_role.github_action_ECR_role.arn
 }
 
