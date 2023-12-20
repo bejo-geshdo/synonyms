@@ -5,8 +5,13 @@ import { app } from "..";
 
 chai.use(chaiHttp);
 
+//TODO have only one describe for each endpoint with many it's
+
 //Checks if we can add a synonym pair
 describe("POST /add", () => {
+  beforeEach(() => {
+    const jsonRes = { words: ["foo", "bar"] };
+  });
   it("should add a synonym pair", (done) => {
     chai
       .request(app)
