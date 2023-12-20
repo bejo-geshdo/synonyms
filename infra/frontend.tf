@@ -109,7 +109,7 @@ resource "aws_iam_role" "github_action_S3_role" {
   assume_role_policy = data.aws_iam_policy_document.github_action_ECR_doc.json
 }
 
-data "aws_iam_policy_document" "github_action_ECR_policy_doc" {
+data "aws_iam_policy_document" "github_action_S3_policy_doc" {
   statement {
     #TODO lock down action so it can not delete the bucket
     actions   = ["s3:*"]
@@ -137,6 +137,6 @@ output "cloud_front_ID" {
 }
 
 output "gh_actions_S3_role_arn" {
-  value = aws_iam_role.github_action_S3_role
+  value = aws_iam_role.github_action_S3_role.arn
 }
 
