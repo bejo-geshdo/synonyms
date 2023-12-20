@@ -16,7 +16,7 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: eu-central-1
-  credentials-account: arn:aws:iam::275567994947:role/synonyms-dev-gh-actions-ECR-role
+  credentials-account: arn:aws:iam::275567994947:role/synonyms-prod-gh-actions-ECR-role
   ENV_NAME: prod
 
 jobs:
