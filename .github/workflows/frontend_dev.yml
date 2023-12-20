@@ -16,7 +16,7 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: eu-central-1
-  credentials-account: arn:aws:iam::275567994947:role/synonyms-prod-gh-actions-S3-role20231220143455967600000001
+  credentials-account: arn:aws:iam::275567994947:role/synonyms-dev-gh-actions-S3-role20231220143455967600000001
   ENV_NAME: dev
   CF_DISTRIBUTION: d123
 
