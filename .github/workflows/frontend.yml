@@ -3,7 +3,7 @@ name: Update Frontend Prod
 on:
   push:
     branches:
-      - dev
+      - main
     paths:
       - frontend/**
       - .github/workflows/frontend.yml
