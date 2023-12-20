@@ -1,0 +1,60 @@
+name: Update Infra
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - infra/**
+      - .github/workflows/infra.yml
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: eu-central-1
+  credentials-account: arn:aws:iam::275567994947:role/github-s3
+  ENV_NAME: dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ env.credentials-account }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.4
+
+      - name: Terraform Init
+        working-directory: ./infra
+        run: terraform init
+
+      #TODO Implement dev/prod
+      # - name: Terraform Workspace
+      #   working-directory: ./infra
+      #   run: terraform workspace select -or-create ${{ env.ENV_NAME }}
+
+      #Validates the syntax of our .tf files
+      - name: Terraform Validate
+        working-directory: ./infra
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./infra
+        run: terraform plan -out=tfplan -input=false
+
+      - name: Terrafomr apply
+        working-directory: ./infra
+        run: terraform apply -auto-approve "tfplan"
