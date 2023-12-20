@@ -17,7 +17,7 @@ permissions:
 env:
   AWS_DEFAULT_REGION: eu-central-1
   credentials-account: arn:aws:iam::275567994947:role/terraform-20231219172347146900000001
-  TF_WORKSPACE: dev
+  WORKSPACE_NAME: dev
 
 jobs:
   deploy:
@@ -44,7 +44,7 @@ jobs:
       #TODO Implement dev/prod
       - name: Terraform Workspace
         working-directory: ./infra
-        run: terraform workspace select -or-create ${{ env.TF_WORKSPACE }}
+        run: terraform workspace select -or-create ${{ env.WORKSPACE_NAME }}
 
       #Validates the syntax of our .tf files
       - name: Terraform Validate
