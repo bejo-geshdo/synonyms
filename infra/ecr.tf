@@ -34,14 +34,14 @@ data "aws_iam_policy_document" "github_action_ECR_policy_doc" {
     #TODO lock down action to only put or the same as AmazonEC2ContainerRegistryPowerUser
     actions   = ["ecr:*"]
     effect    = "Allow"
-    resources = aws_ecr_repository.app.arn
+    resources = [aws_ecr_repository.app.arn]
   }
 }
 
 resource "aws_iam_policy" "github_action_ECR_policy" {
   name_prefix = "${var.name}-${var.env}-gh-actions-ECR-policy"
   description = "Used to give github actions access to the ${aws_ecr_repository.app.name}"
-  policy      = data.aws_iam_policy_document.github_action_ECR_policy_doc
+  policy      = data.aws_iam_policy_document.github_action_ECR_policy_doc.json
 }
 
 resource "aws_iam_role_policy_attachment" "github_action_ECR_policy" {
