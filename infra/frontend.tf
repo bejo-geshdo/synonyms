@@ -132,7 +132,7 @@ data "aws_iam_policy_document" "github_action_S3_doc" {
 }
 
 resource "aws_iam_role" "github_action_S3_role" {
-  name_prefix        = "${var.name}-${var.env}-gh-actions-S3-role"
+  name               = "${var.name}-${var.env}-gh-actions-S3-role"
   assume_role_policy = data.aws_iam_policy_document.github_action_ECR_doc.json
 }
 

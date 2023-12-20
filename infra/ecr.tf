@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "github_action_ECR_doc" {
 }
 
 resource "aws_iam_role" "github_action_ECR_role" {
-  name_prefix        = "${var.name}-${var.env}-gh-actions-ECR-role"
+  name               = "${var.name}-${var.env}-gh-actions-ECR-role"
   assume_role_policy = data.aws_iam_policy_document.github_action_ECR_doc.json
 }
 
