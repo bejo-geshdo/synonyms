@@ -4,7 +4,7 @@ terraform {
   }
   backend "s3" {
     bucket = "tf-state-275567994947"
-    key = "synonyms-state"
+    key    = "synonyms-state"
     region = "eu-central-1"
     #Added for state locking 
     dynamodb_table = "tf-state-275567994947"
@@ -13,6 +13,6 @@ terraform {
 
 provider "aws" {
   //profile = "bejo"
-  region  = "eu-central-1"
+  region = "eu-central-1"
 }
 
