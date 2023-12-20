@@ -1,4 +1,4 @@
-name: Update Frontend Prod
+name: Update Frontend Dev
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - dev
     paths:
       - frontend/**
-      - .github/workflows/frontend.yml
+      - .github/workflows/frontend_dev.yml
 
   workflow_dispatch:
 
@@ -17,7 +17,7 @@ permissions:
 env:
   AWS_DEFAULT_REGION: eu-central-1
   credentials-account: arn:aws:iam::275567994947:role/synonyms-prod-gh-actions-S3-role20231220143455967600000001
-  ENV_NAME: prod
+  ENV_NAME: dev
   CF_DISTRIBUTION: d123
 
 jobs:

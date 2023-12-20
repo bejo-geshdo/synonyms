@@ -1,12 +1,12 @@
-name: Update Backend Prod
+name: Update Backend Dev
 
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - backend/**
-      - .github/workflows/backend.yml
+      - .github/workflows/backend_dev.yml
 
   workflow_dispatch:
 
@@ -17,7 +17,7 @@ permissions:
 env:
   AWS_DEFAULT_REGION: eu-central-1
   credentials-account: arn:aws:iam::275567994947:role/synonyms-prod-gh-actions-ECR-role20231220122701246600000001
-  ENV_NAME: prod
+  ENV_NAME: dev
 
 jobs:
   test:
