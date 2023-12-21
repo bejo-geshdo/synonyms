@@ -3,6 +3,7 @@ import cors from "cors";
 
 import addRoutes from "./routes/add";
 import searchRoutes from "./routes/find";
+import swaggerRoutes from "./routes/swagger";
 
 export const app = express();
 const port = process.env.PORT || 8080;
@@ -14,6 +15,8 @@ app.use(cors());
 app.use("/add", addRoutes);
 
 app.use("/find", searchRoutes);
+
+app.use("/swagger", swaggerRoutes);
 
 //Starts the express js server on port
 const server = app.listen(port, () => {
