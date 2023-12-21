@@ -8,6 +8,7 @@ const apiUrl = process.env.REACT_APP_API_URL
 
 function App() {
   const [word, setWord] = useState("");
+  const [findWord, setfindWord] = useState("");
   const [words, setWords] = useState([]);
   const [responseAdd, setResponseAdd] = useState("");
   const [response, setResponse] = useState("");
@@ -45,17 +46,18 @@ function App() {
 
   const handleFindWord = async () => {
     try {
-      const response = await fetch(`${apiUrl}/find?word=${word}`);
+      const response = await fetch(`${apiUrl}/find?word=${findWord}`);
       console.log("status: ", response.status);
 
       if (response.status === 200) {
         const data = await response.json();
         const words = data.message;
-        setResponse(JSON.stringify(words));
+        setfindWord("");
+        setResponse(words);
       } else if (response.status === 404) {
-        setResponse("Word not found");
+        setResponse(["Word not found"]);
       } else {
-        setResponse("Error");
+        setResponse(["Error"]);
       }
     } catch (error) {
       console.error(error);
@@ -83,11 +85,17 @@ function App() {
       <h1>Find Word</h1>
       <input
         type="text"
-        value={word}
-        onChange={(e) => setWord(e.target.value)}
+        value={findWord}
+        onChange={(e) => setfindWord(e.target.value)}
       />
       <button onClick={handleFindWord}>Find</button>
-      {response && <p>{response}</p>}
+      {response && (
+        <ul>
+          {response.map((word, index) => (
+            <li key={index}>{word}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

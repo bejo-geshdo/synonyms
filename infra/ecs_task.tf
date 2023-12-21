@@ -37,7 +37,6 @@ resource "aws_ecs_task_definition" "app" {
   cpu                = 512
   memory             = 512
 
-  #TODO change image to the one in repo
   container_definitions = jsonencode([{
     name         = "${var.name}-${var.env}",
     image        = "${aws_ecr_repository.app.repository_url}:latest",
