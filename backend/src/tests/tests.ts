@@ -95,3 +95,8 @@ describe("GET /find", () => {
       });
   });
 });
+
+//TODO write test for swagger UI express
+// describe("GET /swagger", () => {
+
+// })
