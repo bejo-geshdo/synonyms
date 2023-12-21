@@ -5,7 +5,6 @@ data "aws_availability_zones" "available" { state = "available" }
 
 # Here you can select how man azs you want
 # We only use 1 for now
-#TODO findout why we need 2 :(
 locals {
   azs_count = 2
   azs_names = data.aws_availability_zones.available.names
@@ -30,12 +29,6 @@ resource "aws_subnet" "public" {
 
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
-}
-
-#TODO findout why they use this
-resource "aws_eip" "main" {
-  count      = local.azs_count
-  depends_on = [aws_internet_gateway.main]
 }
 
 # --- Public Route Table ---
