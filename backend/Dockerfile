@@ -36,4 +36,4 @@ ENV NODE_ENV production
 EXPOSE 8080
 # Change user to code to improve security
 USER node
-ENTRYPOINT ["dumb-init", "node", "dist/index.js"]
+ENTRYPOINT ["dumb-init", "node", "dist/src/index.js"]

@@ -89,3 +89,6 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${SHORT_SHA}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+        # TODO Add check if docker file can start up successfully
+        # TODO add check that the new Docker file is deployed
