@@ -18,6 +18,14 @@ function App() {
     setWord("");
   };
 
+  const handleEmptyWords = () => {
+    setWords([]);
+  };
+
+  const handleRemoveWord = (index) => {
+    setWords((prevWords) => prevWords.filter((_, i) => i !== index));
+  };
+
   const handleAddToDB = async () => {
     if (words.length < 2) {
       setResponseAdd("You need at least two words");
@@ -74,11 +82,22 @@ function App() {
         onChange={(e) => setWord(e.target.value)}
       />
       <button onClick={handleAddWord}>Add</button>
+      <button className="delete-button" onClick={handleEmptyWords}>
+        Empty words list
+      </button>
+      <p>You can remove a word by clicking on it</p>
       <ul>
         {words.map((word, index) => (
-          <li key={index}>{word}</li>
+          <li
+            key={index}
+            className="word-item"
+            onClick={() => handleRemoveWord(index)}
+          >
+            {word}
+          </li>
         ))}
       </ul>
+
       <button onClick={handleAddToDB}>Send to DB</button>
       {responseAdd && <p>{responseAdd}</p>}
 

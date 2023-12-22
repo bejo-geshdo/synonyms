@@ -47,6 +47,11 @@ button:hover {
   background-color: #0056b3;
 }
 
+.delete-button:hover {
+  background-color: rgb(165, 40, 40);
+  cursor: pointer;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -54,9 +59,14 @@ ul {
 
 li {
   padding: 10px;
-  background-color: #e8e8e8; /* lighter list item background */
+  background-color: #3e3d3d; /* lighter list item background */
   margin-bottom: 10px;
   border-radius: 5px;
+}
+
+.word-item:hover {
+  background-color: rgb(165, 40, 40);
+  cursor: pointer;
 }
 
 p {

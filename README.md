@@ -62,4 +62,42 @@ When a PR is made into `main` a test action is run testing Infra, Backend and Fr
 
 ## Improvments
 
-Here i will write thing that i can improve about the app.
+Things that can be improved about the app:
+
+### CI/CD
+
+- Have the ECS cluster automaticly update when a new docker images is pushed to ECR
+
+- Added testing of the docker image
+
+- Use GitHub envrionmets
+
+- Use Github envrionmet variables in gh actions
+
+- Testing of the frontend
+
+- Reset/delete words from the DB
+
+- Load in demo data
+
+### Backend
+
+- Improve code strucktrur in Express(sepret folders for routes, controllers, osv)
+
+- Add more checks in the API(Can't post empty strings or the same word)
+
+- Add /helth or / path in API to use for helth checks
+
+- Add tests for swagger endpoint
+
+### Infra
+
+- Add diagram of infra
+
+- Find a better way to validate the ACM before atching it to ABL HTTPS listner
+
+- Look into useing sticky sessions ALB
+
+- Lock down IAM roles
+
+- Look into useing API GW infront of ALB
