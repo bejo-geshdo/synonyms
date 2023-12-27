@@ -271,10 +271,15 @@ resource "aws_route53_record" "api_ec2" {
 
 data "aws_iam_policy_document" "github_action_ASG_refresh_policy_doc" {
   statement {
-    #TODO lock down action to only put or the same as AmazonEC2ContainerRegistryPowerUser
-    actions   = ["autoscaling:StartInstanceRefresh", "autoscaling:Describe*"]
+    actions   = ["autoscaling:StartInstanceRefresh"]
     effect    = "Allow"
     resources = [aws_autoscaling_group.ec2_docker.arn]
+  }
+
+  statement {
+    actions   = ["autoscaling:StartInstanceRefresh", "autoscaling:DescribeInstanceRefreshes"]
+    effect    = "Allow"
+    resources = ["*"]
   }
 }
 

@@ -108,7 +108,7 @@ jobs:
       - name: Start the instance refresh
         id: refresh
         run: |
-          response=$(aws autoscaling start-instance-refresh --auto-scaling-group-name ${{env.ASG_ID}} --preferences '{"SkipMatching":true}')
+          response=$(aws autoscaling start-instance-refresh --auto-scaling-group-name ${{env.ASG_ID}} --preferences '{"SkipMatching":false}')
           echo "::set-output name=instance_refresh_id::$(echo $response | jq -r '.InstanceRefreshId')"
 
       - name: Monitor the instance refresh
