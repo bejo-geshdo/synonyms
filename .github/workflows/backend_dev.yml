@@ -121,7 +121,7 @@ jobs:
             if [[ "$status" == "InProgress" ]] || [[ "$status" == "Pending" ]]; then
                 echo "Instance refresh is still in progress..."
                 sleep 10
-            elif [[ "$status" != "Successful" ]]
+            elif [[ "$status" != "Successful" ]]; then
                 echo "An error occurred with the Instance Refresh"
                 echo "Error: $status"
                 exit 1
