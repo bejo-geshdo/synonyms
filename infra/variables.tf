@@ -37,6 +37,13 @@ variable "hosted_zone_id" {
   description = "The ID of the route 53 hosted zone for our domain"
 }
 
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+
+  description = "The EC2 instances type"
+}
+
 variable "github_repo" {
   type        = string
   description = "The name of the github repo that will run the gh action"
