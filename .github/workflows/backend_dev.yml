@@ -18,6 +18,7 @@ env:
   AWS_DEFAULT_REGION: eu-central-1
   credentials-account: arn:aws:iam::275567994947:role/synonyms-dev-gh-actions-ECR-role
   ENV_NAME: dev
+  ASG_ID: synonyms-dev-ec2-asg-
 
 jobs:
   test:
@@ -92,3 +93,40 @@ jobs:
 
         # TODO Add check if docker file can start up successfully
         # TODO add check that the new Docker file is deployed
+
+  update:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      # Get's access to aws
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ env.credentials-account }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Start the instance refresh
+        id: refresh
+        run: |
+          response=$(aws autoscaling start-instance-refresh --auto-scaling-group-name ${{env.ASG_ID}})
+          echo "::set-output name=instance_refresh_id::$(echo $response | jq -r '.InstanceRefreshId')"
+
+      - name: Monitor the instance refresh
+        run: |
+          instance_refresh_id=${{ steps.refresh.outputs.instance_refresh_id }}
+          while true; do
+            response=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name ${{env.ASG_ID}} --instance-refresh-ids "$instance_refresh_id")
+            status=$(echo $response | jq -r '.InstanceRefreshes[0].Status')
+
+            if [[ "$status" == "InProgress" ]] || [[ "$status" == "Pending" ]]; then
+                echo "Instance refresh is still in progress..."
+                sleep 10
+            elif [[ "$status" != "Successful" ]]
+                echo "An error occurred with the Instance Refresh"
+                echo "Error: $status"
+                exit 1
+            else
+                echo "Instance refresh completed."
+                break
+            fi
+          done
