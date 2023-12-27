@@ -189,7 +189,6 @@ resource "aws_lb" "ec2_docker" {
   security_groups    = [aws_security_group.http.id]
 }
 
-#This might fail
 resource "aws_lb_target_group" "ec2_docker_alb" {
   name_prefix = "ec2-"
   vpc_id      = aws_vpc.main.id
@@ -266,4 +265,26 @@ resource "aws_route53_record" "api_ec2" {
   ttl     = "300"
   name    = "api-ec2.${var.domain}"
   records = [aws_lb.ec2_docker.dns_name]
+}
+
+# --- IAM for gh actions ---
+
+data "aws_iam_policy_document" "github_action_ASG_refresh_policy_doc" {
+  statement {
+    #TODO lock down action to only put or the same as AmazonEC2ContainerRegistryPowerUser
+    actions   = ["autoscaling:StartInstanceRefresh", "autoscaling:Describe*"]
+    effect    = "Allow"
+    resources = [aws_autoscaling_group.ec2_docker.arn]
+  }
+}
+
+resource "aws_iam_policy" "github_action_ASG_refresh_policy" {
+  name_prefix = "${var.name}-${var.env}-gh-actions-ASG_refresh-policy"
+  description = "Used to allow github actions to refresh an ASG when a new docker image exists"
+  policy      = data.aws_iam_policy_document.github_action_ASG_refresh_policy_doc.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_action_ASG_refresh_policy" {
+  role       = aws_iam_role.github_action_ECR_role.name
+  policy_arn = aws_iam_policy.github_action_ASG_refresh_policy.arn
 }
