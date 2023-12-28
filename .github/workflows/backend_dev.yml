@@ -117,9 +117,12 @@ jobs:
           while true; do
             response=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name ${{env.ASG_ID}} --instance-refresh-ids "$instance_refresh_id")
             status=$(echo $response | jq -r '.InstanceRefreshes[0].Status')
+            percentage=$(echo $response | jq -r '.InstanceRefreshes[0].PercentageComplete')
 
             if [[ "$status" == "InProgress" ]] || [[ "$status" == "Pending" ]]; then
                 echo "Instance refresh is still in progress..."
+                echo "Status: $status"
+                echo "$ercentage% complete"
                 sleep 10
             elif [[ "$status" != "Successful" ]]; then
                 echo "An error occurred with the Instance Refresh"
